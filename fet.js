@@ -92,7 +92,19 @@ export default function fet(params) {
     } elseif (typeof params.from === 'object') {
         
     }
-      
+    
+    
+    // change
+    document.body.childNodes.forEach(item => {
+        let name = item.nodeName;
+        if (name !== 'SCRIPT' && name !== 'STYLE') list.push(item); 
+    });
+
+    Object.keys(words).forEach(word => {
+        list.map(node => replaceInText(node, `{lang:${word}}`, words[word]));
+    }); 
+    
+    
 }
 
 fet.isValidUrl = function(str) {
@@ -109,3 +121,4 @@ fet.mergeObjects = function(defaultObj, toMergeObject) {
     Object.keys(toMergeObject).map(param => defaultObj[param] = toMergeObject[param]);
     return defaultObj;
 };
+
