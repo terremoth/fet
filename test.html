@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{lang:title}</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        header {
+            width: 100%;
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{lang:enterprise_name}</h1>
+        <nav>
+            <ul>
+                <li><a href="#">{lang:home}</a></li>
+                <li><a href="#">{lang:about}</a></li>
+                <li><a href="#">{lang:services}</a></li>
+                <li><a href="#">{lang:contact}</a></li>
+                <li><a href="#">{lang:technology}</a></li>
+                <li><a href="#">{lang:login}</a></li>
+                <li><a href="#">{lang:register}</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {lang:company_description}
+    </main>
+    <footer>
+        <address>{lang:address}</address>
+    </footer>
+    <script src="fet.js"></script>
+    <script>
+        let template = {
+
+                pt: {
+                    home: "Início",
+                    about: "Sobre nós",
+                    services: "Serviços",
+                    products: "Produtos",
+                    portifolio: "Portfólio",
+                    sustainability: "Sustentabilidade", 
+                    contact: "Contate-nos",
+                    technology: "Tecnologia",
+                    login: "Entre",
+                    register: "Registre-se"
+                },
+                en: {
+                    home: "Home",
+                    about: "About",
+                    services: "Services",
+                    products: "Products",
+                    portifolio: "Portifolio",
+                    sustainability: "Sustainability", 
+                    contact: "Contactus",
+                    enterprise_name: "My company",
+                    title: "The Enterprise",
+                    technology: "Technology",
+                    company_description: 'We Are a company that make people happy',
+                    address: 'NoWhere, EUA - 751st Light Avenue',
+                    login: "Login",
+                    register: "Register" 
+                },
+                es: {
+                    home: "Inicio",
+                    about: "Sobre Nosotros",
+                    services: "Servicios",
+                    products: "Productos",
+                    portifolio: "Portifolio",
+                    sustainability: "Sustentabilidad", 
+                    contact: "Contáctenos",
+                    technology: "Tecnología",
+                    login: "Iniciar Sesión",
+                    register: "Registrarse" 
+                }
+                
+            };
+
+        fet({
+            template
+        });
+
+    </script>
+</body>
+</html>

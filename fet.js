@@ -1,124 +1,82 @@
 /*
-params: 
-    => template structure:
-    - {
+    => params.template structure:
+    {
         lang: {
             pt: {
                 home: "Início",
-                about: "Sobre nós",
-                contact: "Contato",
-                services: "Serviços",
-                products: "Produtos",
-                portifolio: "Portfólio",
-                sustainability: "Sustentabilidade", 
-                contactus: "Contate-nos",
-                technology: "Tecnologia",
-                login: "Entre",
-                register: "Registre-se"
+                about: "Sobre nós", ...
             },
             en: {
                 home: "Home",
-                about: "About",
-                contact: "Contact",
-                services: "Services",
-                products: "Products",
-                portifolio: "Portifolio",
-                sustainability: "Sustainability", 
-                contactus: "Contactus",
-                technology: "Technology",
-                login: "Login",
-                register: "Register" 
-            }
+                about: "About", ...
+            },
             es: {
                 home: "Inicio",
-                about: "Sobre Nosotros",
-                contact: "Contacto",
-                services: "Servicios",
-                products: "Productos",
-                portifolio: "Portifolio",
-                sustainability: "Sustentabilidad", 
-                contactus: "Contáctenos",
-                technology: "Tecnología",
-                login: "Iniciar Sesión",
-                register: "Registrarse" 
+                about: "Sobre Nosotros", ...
             }
-            ... other langs...
-      }
-    
-    -  from: URL ou string
-        - URL retornando json:
+        ... other langs ...
+        }
+    }
 */
 
-export default function fet(params) {
+function fet(params) {
 
     let defaultParams = {
-        'from': undefined,
+        'url': false,
         'template': {},
-        'where': document,
-        'async': false,
-        'localStore': true,
+        'where': document.body,
         'slug': 'lang',
         'lang': 'en', //default
-        'detectLang': false
+        'fallback': 'en'
     }
     
     params = typeof params === 'object' ? fet.mergeObjects(defaultParams, params) : params;
     
-    if (fet.isValidUrl(params.from)) {
-        
-        let request  = new XMLHttpRequest;
-        let response = false;
-        
-        request.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                params.template = fet.mergeObjects(params.template, JSON.parse(this.responseText));
-                
-                let nodesToSearchToReplace = params.where;
-                
-                if (typeof node === 'object') {
-                    node = document.nodeName;
-                }
-                
-                document.querySelectorAll();
-                
-                var parser = new window.DOMParser();
-                var html = parser.parseFromString(, "text/html");
-                where.innerHTML += html.body.innerHTML;
-            }
-        };
-        
-        request.open("GET", params.url, params.async);
-        request.send();
-    } elseif (typeof params.from === 'object') {
-        
+    if (params.url) {
+        if (location.pathname.match(params.url) === null) {
+            return false;
+        }
     }
+
+    let list = [];
     
-    
-    // change
-    document.body.childNodes.forEach(item => {
+    if (params.where.DOCUMENT_NODE === document.DOCUMENT_NODE) {
+        where = document;
+    }
+
+    where.childNodes.forEach(item => {
         let name = item.nodeName;
         if (name !== 'SCRIPT' && name !== 'STYLE') list.push(item); 
     });
 
-    Object.keys(words).forEach(word => {
-        list.map(node => replaceInText(node, `{lang:${word}}`, words[word]));
+    let availableWords = params.template[params.lang];
+
+    if ( ! availableWords && (params.fallback)) {
+        availableWords = params.template[params.fallback] || {};
+    }
+
+    Object.keys(availableWords).forEach(word => {
+        list.map(node => fet.replaceInText(node, `{lang:${word}}`, availableWords[word]));
     }); 
     
-    
 }
-
-fet.isValidUrl = function(str) {
-     var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
-    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
-    '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
-    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
-    '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
-    '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
-    return !!pattern.test(str);
-};
 
 fet.mergeObjects = function(defaultObj, toMergeObject) {
     Object.keys(toMergeObject).map(param => defaultObj[param] = toMergeObject[param]);
     return defaultObj;
 };
 
+fet.replaceInText = function (element, pattern, replacement) {
+    for (let node of element.childNodes) {
+        switch (node.nodeType) {
+            case Node.ELEMENT_NODE:
+                fet.replaceInText(node, pattern, replacement);
+                break;
+            case Node.TEXT_NODE:
+                node.textContent = node.textContent.replace(pattern, replacement);
+                break;
+            case Node.DOCUMENT_NODE:
+                fet.replaceInText(node, pattern, replacement);
+        }
+    }
+};
